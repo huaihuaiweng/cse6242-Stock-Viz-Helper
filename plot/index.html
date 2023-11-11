@@ -190,9 +190,54 @@
     .tradearrow path.highlight.sell {
         stroke: #9900FF;
     }
+    .options-group {
+        position: absolute;
+        right: 10px; /* Adjust this value as needed */
+        padding: 10px;
+        background: #ffffff;
+        border-radius: 5px;
+        border: 1px solid #cccccc;
+        margin-top: 10px; /* Spacing between groups */
+        width: 100px;
+    }
+
+    .group-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    #options-group1 {
+        top: 50px; /* Adjust this value as needed */
+    }
+
+    #options-group2 {
+        top: 200px; /* Adjust this value as needed */
+    }
 
 </style>
 <body>
+    <!-- Group 1 for main options -->
+    <div id="options-group1" class="options-group">
+        <div class="group-title">Technical Indicator</div>
+        <form>
+            <label><input type="checkbox" id="volumeCheckbox"> Volume</label><br>
+            <label><input type="checkbox" id="candlestickCheckbox"> CandleStick</label><br>
+            <label><input type="checkbox" id="movingAverageCheckbox"> Moving Average</label><br>
+            <label><input type="checkbox" id="macdCheckbox"> MACD</label><br>
+            <label><input type="checkbox" id="rsiCheckbox"> RSI</label><br>
+        </form>
+    </div>
+
+    <!-- Group 2 for additional options -->
+    <div id="options-group2" class="options-group">
+        <div class="group-title">Toolbox</div>
+        <form>
+            <label><input type="checkbox" id="trendlineCheckbox"> Trendlines</label><br>
+            <label><input type="checkbox" id="supstanceCheckbox"> Supstances</label><br>
+            <label><input type="checkbox" id="tradearrowCheckbox"> Trade Arrows</label><br>
+        </form>
+    </div>
+    
 <button>Reset</button>
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script src="http://techanjs.org/techan.min.js"></script>
@@ -380,6 +425,10 @@
             .xAnnotation(timeAnnotation)
             .yAnnotation([rsiAnnotation, rsiAnnotationLeft])
             .verticalWireRange([0, dim.plot.height]);
+    
+    // var ichimoku = techan.plot.ichimoku()
+    //         .xScale(x)
+    //         .yScale(y);
 
     var svg = d3.select("body").append("svg")
             .attr("width", dim.width)
@@ -389,7 +438,7 @@
 
     defs.append("clipPath")
             .attr("id", "ohlcClip")
-        .append("rect")
+            .append("rect")
             .attr("x", 0)
             .attr("y", 0)
             .attr("width", dim.plot.width)
@@ -399,7 +448,7 @@
         .enter()
             .append("clipPath")
             .attr("id", function(d, i) { return "indicatorClip-" + i; })
-        .append("rect")
+            .append("rect")
             .attr("x", 0)
             .attr("y", function(d, i) { return indicatorTop(i); })
             .attr("width", dim.plot.width)
@@ -424,7 +473,7 @@
     ohlcSelection.append("g")
             .attr("class", "axis")
             .attr("transform", "translate(" + x(1) + ",0)")
-        .append("text")
+            .append("text")
             .attr("transform", "rotate(-90)")
             .attr("y", -12)
             .attr("dy", ".71em")
@@ -496,8 +545,11 @@
     svg.append("g")
             .attr("class", "supstances analysis")
             .attr("clip-path", "url(#ohlcClip)");
+    // svg.append("g")
+    //         .attr("class", "ichimoku")
+    //         .attr("clip-path", "url(#ohlcClip)");
 
-    d3.select("button").on("click", reset);
+    d3.select("button").on("click", clearAllCheckboxes);
 
     d3.csv("data.csv", function(error, data) {
         var accessor = candlestick.accessor(),
@@ -567,8 +619,8 @@
     });
 
     function reset() {
-        zoom.scale(1);
-        zoom.translate([0,0]);
+        // zoom.scale(1);
+        // zoom.translate([0,0]);
         draw();
     }
 
@@ -576,7 +628,6 @@
         x.zoomable().domain(d3.event.transform.rescaleX(zoomableInit).domain());
         y.domain(d3.event.transform.rescaleY(yInit).domain());
         yPercent.domain(d3.event.transform.rescaleY(yPercentInit).domain());
-
         draw();
     }
 
@@ -606,5 +657,72 @@
         svg.select("g.supstances").call(supstance.refresh);
         svg.select("g.tradearrow").call(tradearrow.refresh);
     }
+
+    document.getElementById('volumeCheckbox').addEventListener('change', function() {
+        svg.selectAll(".volume").style("display", this.checked ? null : "none");
+    });
+
+    document.getElementById('candlestickCheckbox').addEventListener('change', function() {
+        svg.selectAll(".candlestick").style("display", this.checked ? null : "none");
+    });
+
+    document.getElementById('movingAverageCheckbox').addEventListener('change', function() {
+        svg.selectAll(".sma").style("display", this.checked ? null : "none");
+        svg.selectAll(".ema").style("display", this.checked ? null : "none"); // Assuming EMA is also a moving average
+    });
+
+    document.getElementById('macdCheckbox').addEventListener('change', function() {
+        svg.selectAll(".macd").style("display", this.checked ? null : "none");
+    });
+
+    document.getElementById('rsiCheckbox').addEventListener('change', function() {
+        svg.selectAll(".rsi").style("display", this.checked ? null : "none");
+    });
+
+    document.getElementById('trendlineCheckbox').addEventListener('change', function() {
+        svg.selectAll(".trendlines").style("display", this.checked ? null : "none");
+    });
+
+    // Event listener for the supstance checkbox
+    document.getElementById('supstanceCheckbox').addEventListener('change', function() {
+        svg.selectAll(".supstances").style("display", this.checked ? null : "none");
+    });
+
+    // Event listener for the tradearrow checkbox
+    document.getElementById('tradearrowCheckbox').addEventListener('change', function() {
+        svg.selectAll(".tradearrow").style("display", this.checked ? null : "none");
+    });
+
+    // Assuming you have an element for Ichimoku Cloud, which might not be the case.
+    // If you don't, you will need to implement the rendering for it first.
+    // document.getElementById('ichimokuCloudCheckbox').addEventListener('change', function() {
+    //     svg.selectAll(".ichimoku").style("display", this.checked ? null : "none"); // Replace ".ichimoku" with your actual Ichimoku Cloud class or group
+    // });
+
+    // Call this function initially to apply the checkbox states to the chart elements
+    function applyInitialCheckboxStates() {
+        document.getElementById('volumeCheckbox').dispatchEvent(new Event('change'));
+        document.getElementById('candlestickCheckbox').dispatchEvent(new Event('change'));
+        document.getElementById('movingAverageCheckbox').dispatchEvent(new Event('change'));
+        document.getElementById('macdCheckbox').dispatchEvent(new Event('change'));
+        document.getElementById('rsiCheckbox').dispatchEvent(new Event('change'));
+        document.getElementById('trendlineCheckbox').dispatchEvent(new Event('change'));
+        document.getElementById('supstanceCheckbox').dispatchEvent(new Event('change'));
+        document.getElementById('tradearrowCheckbox').dispatchEvent(new Event('change'));
+        // document.getElementById('ichimokuCloudCheckbox').dispatchEvent(new Event('change'));
+    }
+
+    // Call this function after the chart and checkboxes are initialized to set the initial states
+    applyInitialCheckboxStates();
+
+    function clearAllCheckboxes() {
+    var checkboxes = document.querySelectorAll('form input[type="checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = false;
+        checkbox.dispatchEvent(new Event('change'));
+    });
+    // Call any additional functions to update the chart here if necessary
+}
+
 
 </script>
