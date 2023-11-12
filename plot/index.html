@@ -81,7 +81,8 @@
         .range([dim.indicator.top, dim.indicator.bottom]);
 
     // var parseDate = d3.timeParse("%d-%b-%y");
-    var parseDate = d3.timeParse("%Y/%m/%d");
+    // var parseDate = d3.timeParse("%Y/%m/%d");
+    var parseDate = d3.timeParse("%Y-%m-%d");
 
 
     var zoom = d3.zoom()
@@ -419,41 +420,57 @@
      *
      * */
 
-    d3.csv("../stock_data/combined_data.csv", function (data) {
+    d3.csv("../stock_data/combined_stocks.csv", function (data) {
 
         // get company list
-        var companyList = Array.from(new Set(data.map(d => d.company))).sort();
+        var companyList = Array.from(new Set(data.map(d => d.Company))).sort();
         // add options to Button
 
-        var dropdown = d3.select(".dropdown")
-            .selectAll('option')
+        var dropdown = d3.select(".dropdown");
+
+        dropdown.append("option")
+                .text("Select a stock")
+                .attr("value", "")
+                .attr("disabled", true)
+                .attr("selected", true)
+
+        dropdown.selectAll('option.company')
             .data(companyList) // take companyList
             .enter()
-            .append('option')
+            .append("option")
+            .classed("company", true)
             .text(d => d)
             .attr("value", d => d);
 
-
-
         d3.select(".dropdown").on("change", function () {
-            var filteredData = data.filter(d => d.company == this.value);
-
+            var filteredData = data.filter(d => d.Company == this.value);
+            console.log("Comapny", this.value)
+            console.log("filteredData", filteredData);
+            // Assuming the data is already sorted by date, find the last date in your dataset
+            var lastDate = d3.max(filteredData, function(d) { return parseDate(d.Date); });
+            // Calculate the first date of the last year (most recent year)
+            var firstDateOfLastYear = new Date(lastDate.getFullYear() - 1, lastDate.getMonth(), lastDate.getDate());
+            // Filter the data to only include entries from the most recent year
+            var one_year_data = filteredData.filter(function(d) {
+                return parseDate(d.Date) >= firstDateOfLastYear;
+            });
             d3.select(".symbol").remove();
 
             svg.append('text')
                 .attr("class", "symbol")
                 .attr("x", 20)
                 .text(companyMap[this.value]);
-            console.log(this.value);
-            createElement(filteredData);
+            console.log("lastDate", lastDate)
+            console.log("firstDateOfLastYear", firstDateOfLastYear)
+            console.log("one_year_data", one_year_data);
+            createElement(one_year_data);
         });
     });
 
 
     function createElement(data) {
         var accessor = candlestick.accessor(),
-            indicatorPreRoll = 33;  // Don't show where indicators don't have data
-        console.log(data);
+        indicatorPreRoll = 33;  // Don't show where indicators don't have data
         data = data.map(function (d) {
             return {
                 date: parseDate(d.Date),
@@ -466,28 +483,29 @@
         }).sort(function (a, b) {
             return d3.ascending(accessor.d(a), accessor.d(b));
         });
-
+        console.log("data", data);
         x.domain(techan.scale.plot.time(data).domain());
         y.domain(techan.scale.plot.ohlc(data.slice(indicatorPreRoll)).domain());
+        console.log("ohlc domain", techan.scale.plot.ohlc(data.slice(indicatorPreRoll)).domain())
         yPercent.domain(techan.scale.plot.percent(y, accessor(data[indicatorPreRoll])).domain());
         yVolume.domain(techan.scale.plot.volume(data).domain());
 
-        var trendlineData = [
-            {start: {date: new Date(2014, 2, 11), value: 72.50}, end: {date: new Date(2014, 5, 9), value: 63.34}},
-            {start: {date: new Date(2013, 10, 21), value: 43}, end: {date: new Date(2014, 2, 17), value: 70.50}}
-        ];
+        // var trendlineData = [
+        //     {start: {date: new Date(2014, 2, 11), value: 72.50}, end: {date: new Date(2014, 5, 9), value: 63.34}},
+        //     {start: {date: new Date(2013, 10, 21), value: 43}, end: {date: new Date(2014, 2, 17), value: 70.50}}
+        // ];
 
-        var supstanceData = [
-            {start: new Date(2014, 2, 11), end: new Date(2014, 5, 9), value: 63.64},
-            {start: new Date(2013, 10, 21), end: new Date(2014, 2, 17), value: 55.50}
-        ];
+        // var supstanceData = [
+        //     {start: new Date(2014, 2, 11), end: new Date(2014, 5, 9), value: 63.64},
+        //     {start: new Date(2013, 10, 21), end: new Date(2014, 2, 17), value: 55.50}
+        // ];
 
-        var trades = [
-            {date: data[67].date, type: "buy", price: data[67].low, low: data[67].low, high: data[67].high},
-            {date: data[100].date, type: "sell", price: data[100].high, low: data[100].low, high: data[100].high},
-            {date: data[130].date, type: "buy", price: data[130].low, low: data[130].low, high: data[130].high},
-            {date: data[170].date, type: "sell", price: data[170].low, low: data[170].low, high: data[170].high}
-        ];
+        // var trades = [
+        //     {date: data[67].date, type: "buy", price: data[67].low, low: data[67].low, high: data[67].high},
+        //     {date: data[100].date, type: "sell", price: data[100].high, low: data[100].low, high: data[100].high},
+        //     {date: data[130].date, type: "buy", price: data[130].low, low: data[130].low, high: data[130].high},
+        //     {date: data[139].date, type: "sell", price: data[139].low, low: data[139].low, high: data[139].high}
+        // ];
 
         var macdData = techan.indicator.macd()(data);
         macdScale.domain(techan.scale.plot.macd(macdData).domain());
@@ -507,10 +525,10 @@
         svg.select("g.crosshair.ohlc").call(ohlcCrosshair).call(zoom);
         svg.select("g.crosshair.macd").call(macdCrosshair).call(zoom);
         svg.select("g.crosshair.rsi").call(rsiCrosshair).call(zoom);
-        svg.select("g.trendlines").datum(trendlineData).call(trendline).call(trendline.drag);
-        svg.select("g.supstances").datum(supstanceData).call(supstance).call(supstance.drag);
+        // svg.select("g.trendlines").datum(trendlineData).call(trendline).call(trendline.drag);
+        // svg.select("g.supstances").datum(supstanceData).call(supstance).call(supstance.drag);
 
-        svg.select("g.tradearrow").datum(trades).call(tradearrow);
+        // svg.select("g.tradearrow").datum(trades).call(tradearrow);
 
         // Stash for zooming
         zoomableInit = x.zoomable().domain([indicatorPreRoll, data.length]).copy(); // Zoom in a little to hide indicator preroll
@@ -519,76 +537,6 @@
 
         draw();
     }
-
-
-    // d3.csv("data.csv", function (error, data) {
-    //     var accessor = candlestick.accessor(),
-    //         indicatorPreRoll = 33;  // Don't show where indicators don't have data
-    //
-    //     data = data.map(function (d) {
-    //         return {
-    //             date: parseDate(d.Date),
-    //             open: +d.Open,
-    //             high: +d.High,
-    //             low: +d.Low,
-    //             close: +d.Close,
-    //             volume: +d.Volume
-    //         };
-    //     }).sort(function (a, b) {
-    //         return d3.ascending(accessor.d(a), accessor.d(b));
-    //     });
-    //
-    //     x.domain(techan.scale.plot.time(data).domain());
-    //     y.domain(techan.scale.plot.ohlc(data.slice(indicatorPreRoll)).domain());
-    //     yPercent.domain(techan.scale.plot.percent(y, accessor(data[indicatorPreRoll])).domain());
-    //     yVolume.domain(techan.scale.plot.volume(data).domain());
-    //
-    //     var trendlineData = [
-    //         {start: {date: new Date(2014, 2, 11), value: 72.50}, end: {date: new Date(2014, 5, 9), value: 63.34}},
-    //         {start: {date: new Date(2013, 10, 21), value: 43}, end: {date: new Date(2014, 2, 17), value: 70.50}}
-    //     ];
-    //
-    //     var supstanceData = [
-    //         {start: new Date(2014, 2, 11), end: new Date(2014, 5, 9), value: 63.64},
-    //         {start: new Date(2013, 10, 21), end: new Date(2014, 2, 17), value: 55.50}
-    //     ];
-    //
-    //     var trades = [
-    //         {date: data[67].date, type: "buy", price: data[67].low, low: data[67].low, high: data[67].high},
-    //         {date: data[100].date, type: "sell", price: data[100].high, low: data[100].low, high: data[100].high},
-    //         {date: data[130].date, type: "buy", price: data[130].low, low: data[130].low, high: data[130].high},
-    //         {date: data[170].date, type: "sell", price: data[170].low, low: data[170].low, high: data[170].high}
-    //     ];
-    //
-    //     var macdData = techan.indicator.macd()(data);
-    //     macdScale.domain(techan.scale.plot.macd(macdData).domain());
-    //     var rsiData = techan.indicator.rsi()(data);
-    //     rsiScale.domain(techan.scale.plot.rsi(rsiData).domain());
-    //
-    //     svg.select("g.candlestick").datum(data).call(candlestick);
-    //     svg.select("g.close.annotation").datum([data[data.length - 1]]).call(closeAnnotation);
-    //     svg.select("g.volume").datum(data).call(volume);
-    //     svg.select("g.sma.ma-0").datum(techan.indicator.sma().period(10)(data)).call(sma0);
-    //     svg.select("g.sma.ma-1").datum(techan.indicator.sma().period(20)(data)).call(sma1);
-    //     svg.select("g.ema.ma-2").datum(techan.indicator.ema().period(50)(data)).call(ema2);
-    //     svg.select("g.macd .indicator-plot").datum(macdData).call(macd);
-    //     svg.select("g.rsi .indicator-plot").datum(rsiData).call(rsi);
-    //
-    //     svg.select("g.crosshair.ohlc").call(ohlcCrosshair).call(zoom);
-    //     svg.select("g.crosshair.macd").call(macdCrosshair).call(zoom);
-    //     svg.select("g.crosshair.rsi").call(rsiCrosshair).call(zoom);
-    //     svg.select("g.trendlines").datum(trendlineData).call(trendline).call(trendline.drag);
-    //     svg.select("g.supstances").datum(supstanceData).call(supstance).call(supstance.drag);
-    //
-    //     svg.select("g.tradearrow").datum(trades).call(tradearrow);
-    //
-    //     // Stash for zooming
-    //     zoomableInit = x.zoomable().domain([indicatorPreRoll, data.length]).copy(); // Zoom in a little to hide indicator preroll
-    //     yInit = y.copy();
-    //     yPercentInit = yPercent.copy();
-    //
-    //     draw();
-    // });
 
     function reset() {
         // zoom.scale(1);
