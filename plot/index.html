@@ -111,8 +111,8 @@
         .yScale(y)
         .y(function (d) {
             // Display the buy and sell arrows a bit above and below the price, so the price is still visible
-            if (d.type === 'buy') return y(d.low) + 5;
-            if (d.type === 'sell') return y(d.high) - 5;
+            if (d.type === 'buy') return y(d.low);
+            if (d.type === 'sell') return y(d.high);
             else return y(d.price);
         });
 
@@ -500,12 +500,23 @@
         //     {start: new Date(2013, 10, 21), end: new Date(2014, 2, 17), value: 55.50}
         // ];
 
-        // var trades = [
-        //     {date: data[67].date, type: "buy", price: data[67].low, low: data[67].low, high: data[67].high},
-        //     {date: data[100].date, type: "sell", price: data[100].high, low: data[100].low, high: data[100].high},
-        //     {date: data[130].date, type: "buy", price: data[130].low, low: data[130].low, high: data[130].high},
-        //     {date: data[139].date, type: "sell", price: data[139].low, low: data[139].low, high: data[139].high}
-        // ];
+        /*var trades_ = [
+             {date: data[67].date, type: "buy", price: data[67].low, low: data[67].low, high: data[67].high},
+             {date: data[100].date, type: "sell", price: data[100].high, low: data[100].low, high: data[100].high},
+             {date: data[130].date, type: "buy", price: data[130].low, low: data[130].low, high: data[130].high},
+             {date: data[139].date, type: "sell", price: data[139].low, low: data[139].low, high: data[139].high}
+        ];
+        console.log("trades_", trades_) */
+        
+        // Dynamically create trendline data
+        var trendlineData = createTrendlineData(data);
+
+        // Dynamically create supstance data
+        var supstanceData = createSupstanceData(data);
+        console.log("supstanceData", supstanceData)
+        // Dynamically create trade data
+        var trades = createTrades(data);
+        // console.log("trades", trades)
 
         var macdData = techan.indicator.macd()(data);
         macdScale.domain(techan.scale.plot.macd(macdData).domain());
@@ -525,10 +536,10 @@
         svg.select("g.crosshair.ohlc").call(ohlcCrosshair).call(zoom);
         svg.select("g.crosshair.macd").call(macdCrosshair).call(zoom);
         svg.select("g.crosshair.rsi").call(rsiCrosshair).call(zoom);
-        // svg.select("g.trendlines").datum(trendlineData).call(trendline).call(trendline.drag);
-        // svg.select("g.supstances").datum(supstanceData).call(supstance).call(supstance.drag);
+        svg.select("g.trendlines").datum(trendlineData).call(trendline).call(trendline.drag);
+        svg.select("g.supstances").datum(supstanceData).call(supstance).call(supstance.drag);
 
-        // svg.select("g.tradearrow").datum(trades).call(tradearrow);
+        svg.select("g.tradearrow").datum(trades).call(tradearrow);
 
         // Stash for zooming
         zoomableInit = x.zoomable().domain([indicatorPreRoll, data.length]).copy(); // Zoom in a little to hide indicator preroll
@@ -644,5 +655,128 @@
         // Call any additional functions to update the chart here if necessary
     }
 
+    function createTrendlineData(data) {
+        // Find the local min and max points for the trendlines
+        // This is a naive approach, it assumes the first and last points will be used
+        // You may want to use a more sophisticated method to find significant trend points
+        let localMax = { value: -Infinity, date: null };
+        let localMin = { value: Infinity, date: null };
+    
+        data.forEach(d => {
+            if (d.high > localMax.value) {
+                localMax.value = d.high;
+                localMax.date = d.date;
+            }
+            if (d.low < localMin.value) {
+                localMin.value = d.low;
+                localMin.date = d.date;
+            }
+        });
+    
+        // Assuming you want to draw trendlines for roughly half the available time frame
+        let halfLength = Math.floor(data.length / 2);
+        let firstHalfData = data.slice(0, halfLength);
+        let secondHalfData = data.slice(-halfLength);
+    
+        // Find local min in the first half and max in the second half for the positive slope
+        let firstHalfMin = d3.min(firstHalfData, d => d.low);
+        let firstHalfMinDate = firstHalfData.find(d => d.low === firstHalfMin).date;
+        let secondHalfMax = d3.max(secondHalfData, d => d.high);
+        let secondHalfMaxDate = secondHalfData.find(d => d.high === secondHalfMax).date;
+    
+        // Find max in the first half and min in the second half for the negative slope
+        let firstHalfMax = d3.max(firstHalfData, d => d.high);
+        let firstHalfMaxDate = firstHalfData.find(d => d.high === firstHalfMax).date;
+        let secondHalfMin = d3.min(secondHalfData, d => d.low);
+        let secondHalfMinDate = secondHalfData.find(d => d.low === secondHalfMin).date;
+    
+        return [
+            {
+                start: { date: firstHalfMinDate, value: firstHalfMin },
+                end: { date: secondHalfMaxDate, value: secondHalfMax }
+            },
+            {
+                start: { date: firstHalfMaxDate, value: firstHalfMax },
+                end: { date: secondHalfMinDate, value: secondHalfMin }
+            }
+        ];
+    }
+        
+    function createSupstanceData(data) {
+        // Assume data is already sorted by date
+    
+        // Define functions to find highs and lows
+        function findHighsLows(dataSubset, isHigh = true) {
+            let extrema = isHigh ? d3.max(dataSubset, d => d.high) : d3.min(dataSubset, d => d.low);
+            let tolerance = (d3.max(dataSubset, d => d.high) - d3.min(dataSubset, d => d.low)) * 0.05; // 5% tolerance
+    
+            return dataSubset.filter(d => isHigh ? (d.high >= extrema - tolerance) : (d.low <= extrema + tolerance));
+        }
+    
+        let highs = findHighsLows(data, true);
+        let lows = findHighsLows(data, false);
+            
+        let resistanceValue = d3.mean(highs, d => d.high);
+        let supportValue = d3.mean(lows, d => d.low);
+    
+        // Identify the dates for the highest high (resistance) and lowest low (support)
+        let resistanceDate = highs.reduce((a, b) => a.high > b.high ? a : b).date;
+        let supportDate = lows.reduce((a, b) => a.low < b.low ? a : b).date;
+
+        // If we want the lines to have a specific length, say 3 months, we can adjust the dates
+        let resistanceStartDate = new Date(resistanceDate);
+        resistanceStartDate.setMonth(resistanceStartDate.getMonth() - 1.5); // 1.5 months before the peak
+        let resistanceEndDate = new Date(resistanceDate);
+        resistanceEndDate.setMonth(resistanceEndDate.getMonth() + 1.5); // 1.5 months after the peak
+
+        let supportStartDate = new Date(supportDate);
+        supportStartDate.setMonth(supportStartDate.getMonth() - 1.5); // 1.5 months before the bottom
+        let supportEndDate = new Date(supportDate);
+        supportEndDate.setMonth(supportEndDate.getMonth() + 1.5); // 1.5 months after the bottom
+
+        // Ensure the dates are within the data range
+        resistanceStartDate = resistanceStartDate < data[0].date ? data[0].date : resistanceStartDate;
+        resistanceEndDate = resistanceEndDate > data[data.length - 1].date ? data[data.length - 1].date : resistanceEndDate;
+        supportStartDate = supportStartDate < data[0].date ? data[0].date : supportStartDate;
+        supportEndDate = supportEndDate > data[data.length - 1].date ? data[data.length - 1].date : supportEndDate;
+
+        return [
+            { start: supportStartDate, end: supportEndDate, value: supportValue },
+            { start: resistanceStartDate, end: resistanceEndDate, value: resistanceValue }
+        ];
+}
+        
+    function createTrades(data) {
+        // Simple moving average crossover strategy
+        let smaPeriodShort = 10;
+        let smaPeriodLong = 20;
+    
+        let smaShort = calculateSMA(data, smaPeriodShort);
+        let smaLong = calculateSMA(data, smaPeriodLong);
+    
+        let trades = [];
+    
+        for (let i = 1; i < data.length; i++) {
+            if (smaShort[i] > smaLong[i] && smaShort[i - 1] <= smaLong[i - 1]) {
+                trades.push({ date: data[i].date, type: "buy", price: data[i].close, low: data[i].low, high: data[i].high});
+            } else if (smaShort[i] < smaLong[i] && smaShort[i - 1] >= smaLong[i - 1]) {
+                trades.push({ date: data[i].date, type: "sell", price: data[i].close, low: data[i].low, high: data[i].high});
+            }
+        }
+    
+        return trades;
+    }
+    
+    function calculateSMA(data, period) {
+        let sma = data.map(d => d.close).map((elem, index, arr) => {
+            let start = Math.max(0, index - period + 1);
+            let subset = arr.slice(start, index + 1);
+            let sum = subset.reduce((a, b) => a + b, 0);
+            return sum / subset.length;
+        });
+    
+        return sma;
+    }
+    
 
 </script>
