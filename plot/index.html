@@ -378,9 +378,6 @@
     svg.append("g")
         .attr("class", "supstances analysis")
         .attr("clip-path", "url(#ohlcClip)");
-    // svg.append("g")
-    //         .attr("class", "ichimoku")
-    //         .attr("clip-path", "url(#ohlcClip)");
 
     d3.select("button").on("click", clearAllCheckboxes);
 
@@ -495,24 +492,6 @@
         yPercent.domain(techan.scale.plot.percent(y, accessor(data[indicatorPreRoll])).domain());
         yVolume.domain(techan.scale.plot.volume(data).domain());
 
-        // var trendlineData = [
-        //     {start: {date: new Date(2014, 2, 11), value: 72.50}, end: {date: new Date(2014, 5, 9), value: 63.34}},
-        //     {start: {date: new Date(2013, 10, 21), value: 43}, end: {date: new Date(2014, 2, 17), value: 70.50}}
-        // ];
-
-        // var supstanceData = [
-        //     {start: new Date(2014, 2, 11), end: new Date(2014, 5, 9), value: 63.64},
-        //     {start: new Date(2013, 10, 21), end: new Date(2014, 2, 17), value: 55.50}
-        // ];
-
-        /*var trades_ = [
-             {date: data[67].date, type: "buy", price: data[67].low, low: data[67].low, high: data[67].high},
-             {date: data[100].date, type: "sell", price: data[100].high, low: data[100].low, high: data[100].high},
-             {date: data[130].date, type: "buy", price: data[130].low, low: data[130].low, high: data[130].high},
-             {date: data[139].date, type: "sell", price: data[139].low, low: data[139].low, high: data[139].high}
-        ];
-        console.log("trades_", trades_) */
-        
         // Dynamically create trendline data
         console.log("x", x.domain())
         console.log("x first", x.domain()[0])
