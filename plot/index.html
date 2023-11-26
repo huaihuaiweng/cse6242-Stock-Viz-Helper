@@ -42,13 +42,124 @@
     </div>
 
     <div id="explanationBox">
-
+        <div id="volumebox">
+            <h1>Volume</h1>
+            Volume measures the number of shares traded in a stock or contracts traded in futures or options.<br>
+            Volume can indicate market strength, as rising markets on increasing volume are typically viewed as strong and healthy.<br>
+            When prices fall on increasing volume, the trend is gathering strength to the downside.<br>
+            When prices reach new highs (or no lows) on decreasing volume, watch out—a reversal might be taking shape.<br>
+            <img id = "volumeimg" src = "/Images/volumehigh.png">
+            <p id = "bold-text">
+                This image indictes that the number/volume of purchases is increasing over time.
+            </p>
+            <br><img id = "volumeimg" src = "/Images/volumelow.png">
+            <p id = "bold-text">
+                This image indictes that the number/volume of purchases is decreasing over time.
+            </p>
+        </div>
+        <div id="candlebox">
+            <h1>CandleStick</h1>
+            A candlestick is a type of price chart used in technical analysis that displays the high, low, open, and <br>
+            closing prices of a security for a specific period. Candlesticks originated from Japanese rice merchants <br>
+            and traders to track market prices and daily momentum hundreds of years before becoming popularized in the <br>
+            United States. Candlesticks can be used by traders looking for chart patterns. <br>
+            <img id = "candleimg" src = "/Images/candlestickbasic.png">
+            <p id = "bold-text">
+                Here’s an example of what candlesticks look like:
+            </p>
+            <h2>a) Bullish Patterns</h2>
+            <figure>
+                <img id = "candleimg" src = "/Images/Hammer Pattern.png">
+                <img id = "candleimg" src = "/Images/Inverse Hammer Pattern.png">
+                <img id = "candleimg" src = "/Images/Bullish Engulfing Pattern.png">
+                <img id = "candleimg" src = "/Images/Piercing Line Pattern.png">
+                <img id = "candleimg" src = "/Images/Morning Star Pattern.png">
+                <img id = "candleimg" src = "/Images/Three White Soldiers Pattern.png">
+                <figcaption>
+                    Hammer Pattern, Inverse Hammer Pattern, Bullish Engulfing Pattern, Piercing Line Pattern, Morning Star Pattern and Three White Soldiers Pattern. (Images taken from <a href="https://groww.in/blog/how-to-read-candlestick-charts" target="_blank">groww.in</a>)
+                </figcaption>
+            </figure>
+            <h2>b) Bearish Patterns</h2>
+            <figure>
+                <img id = "candleimg" src = "/Images/Hanging Man Pattern.png">
+                <img id = "candleimg" src = "/Images/Shooting Star Pattern.png">
+                <img id = "candleimg" src = "/Images/Bearish Engulfing Pattern.png">
+                <img id = "candleimg" src = "/Images/Evening Star Pattern.png">
+                <img id = "candleimg" src = "/Images/Three Black Crows Pattern.png">
+                <figcaption>
+                    Hanging Man Pattern, Shooting Star Pattern, Bearish Engulfing Pattern, Evening Star Pattern and Three Black Crows Pattern. (Images taken from <a href="https://groww.in/blog/how-to-read-candlestick-charts" target="_blank">groww.in</a>)
+                </figcaption>
+            </figure>
+        </div>
+        <div id="movingaveragebox">
+            <h1>MovingAverage</h1>
+            A simple moving average is a technical indicator, or tool, that tracks a security's price over a time <br>
+            period and plots it on a line. This essentially “smooths out” price fluctuations to give an investor a <br>
+            general idea where the trend is heading. <br>
+            <figure>
+                <img id = "movingimg" src = "/Images/Moving average.png">
+                <figcaption>
+                    Moving average (Image taken from <a href="https://www.investopedia.com/terms/m/movingaverage.asp" target="_blank">investopedia.com</a>)
+                </figcaption>
+            </figure>
+            <h2>Exponential Moving Average (EMA) and Simple Moving Average (SMA)</h2>
+            Exponential Moving Average (EMA) is similar to Simple Moving Average (SMA), measuring trend direction over a period of time. <br>
+            However, whereas SMA simply calculates an average of price data, EMA applies more weight to data that is more current. <br>
+            Because of its unique calculation, EMA will follow prices more closely than a corresponding SMA. <br>
+            <figure>
+                <img id = "movingimg" src = "/Images/movingaverage.png">
+                <figcaption>
+                    EMA and SMA in our graphs.
+                </figcaption>
+            </figure>
+        </div>
+        <div id="trendlinebox">
+            <h1>Trendlines</h1>
+            Trendlines visualize upward and downward trends in the price of a stock over time. <br>
+            They are fundamental tools in technical analysis, used to predict future market <br>
+            behavior based on past price actions. <br>
+            <figure>
+                <img id = "trendlinesimg" src = "/Images/Trendlines.png">
+                <figcaption>
+                    The blue lines are the trendlines.
+                </figcaption>
+            </figure>
+        </div>
+        <div id="supstancebox">
+            <h1>Supstance</h1>
+            Supstance lines refers to support and resistance. Support: It’s like a floor where the price seems to bounce upwards after hitting it. <br>
+            When the price drops to a certain level, buyers find the price attractive and start buying, thereby increasing the demand and preventing <br>
+            the price from falling below this level. Resistance: It’s like a ceiling where the price can’t seem to break through. <br>
+            When the price rises to a certain level, sellers find the price appealing and start selling, which increases supply and prevents the <br>
+            price from rising above this level. <br>
+            <figure>
+                <img id = "supstanceimg" src = "/Images/Supstance.png">
+                <figcaption>
+                    The dotted lines indicated the levels in supstance.
+                </figcaption>
+            </figure>
+        </div>
+        <div id="arrowbox">
+            <h1>Trade arrows</h1>
+            The trade arrows are created by a simple moving average (SMA) crossover strategy to generate trading signals. This strategy is used <br>
+            to determine optimal points for entering or exiting trades based on the crossover points of moving averages. When the shorter-term <br>
+            SMA crosses above the longer-term SMA, it indicates a potential upward price momentum and hence a buy signal. Conversely, when <br>
+            the shorter-term SMA crosses below the longer-term SMA, it indicates potential downward price momentum, hence a sell signal. <br>
+            The upper arrow indicates the upward movement/buy and the downward arrow indicates that prices will drop/sell <br>
+            <figure>
+                <img id = "tradearrowimg" src = "/Images/Tradearrows.png">
+                <figcaption>
+                    The arrows indicate the buy/sell.
+                </figcaption>
+            </figure>
+        </div>
     </div>
 </div>
 
 
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script src="http://techanjs.org/techan.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
 <script>
 
     /*
@@ -577,39 +688,102 @@
         svg.select("g.tradearrow").call(tradearrow.refresh);
     }
 
+    var tip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-10, -100])
+        .html(function (d) {
+            return d;
+        });
+
+    svg.call(tip);
+
     document.getElementById('volumeCheckbox').addEventListener('change', function () {
         svg.selectAll(".volume").style("display", this.checked ? null : "none");
+        document.getElementById('volumebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".ohlc").on("mouseover", function(d, i) {
+            tip.show("Volume, Candlestick and Moving average", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     document.getElementById('candlestickCheckbox').addEventListener('change', function () {
         svg.selectAll(".candlestick").style("display", this.checked ? null : "none");
+        document.getElementById('candlebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".ohlc").on("mouseover", function(d, i) {
+            tip.show("Volume, Candlestick and Moving average", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     document.getElementById('movingAverageCheckbox').addEventListener('change', function () {
         svg.selectAll(".sma").style("display", this.checked ? null : "none");
         svg.selectAll(".ema").style("display", this.checked ? null : "none"); // Assuming EMA is also a moving average
+        document.getElementById('movingaveragebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".ohlc").on("mouseover", function(d, i) {
+            tip.show("Volume, Candlestick and Moving average", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     document.getElementById('macdCheckbox').addEventListener('change', function () {
         svg.selectAll(".macd").style("display", this.checked ? null : "none");
+        svg.selectAll(".macd").on("mouseover", function(d, i) {
+            tip.show("The Moving Average Convergence/Divergence indicator is a momentum oscillator primarily used to trade trends. Although it is an oscillator, it is not typically used to identify over bought or oversold conditions. It appears on the chart as two lines which oscillate without boundaries.", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     document.getElementById('rsiCheckbox').addEventListener('change', function () {
         svg.selectAll(".rsi").style("display", this.checked ? null : "none");
+        svg.selectAll(".rsi").on("mouseover", function(d, i) {
+            tip.show("The Relative Strength Index (RSI), developed by J. Welles Wilder, is a momentum oscillator that measures the speed and change of price movements. The RSI oscillates between zero and 100. Traditionally the RSI is considered overbought when above 70 and oversold when below 30.", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     document.getElementById('trendlineCheckbox').addEventListener('change', function () {
         svg.selectAll(".trendlines").style("display", this.checked ? null : "none");
+        document.getElementById('trendlinebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".trendlines").on("mouseover", function(d, i) {
+            tip.show("Trendlines", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     // Event listener for the supstance checkbox
     document.getElementById('supstanceCheckbox').addEventListener('change', function () {
         svg.selectAll(".supstances").style("display", this.checked ? null : "none");
+        document.getElementById('supstancebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".supstances").on("mouseover", function(d, i) {
+            tip.show("Supstances", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     // Event listener for the tradearrow checkbox
     document.getElementById('tradearrowCheckbox').addEventListener('change', function () {
         svg.selectAll(".tradearrow").style("display", this.checked ? null : "none");
+        document.getElementById('arrowbox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".tradearrow").on("mouseover", function(d, i) {
+            tip.show("Tradearrow", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     // Assuming you have an element for Ichimoku Cloud, which might not be the case.
