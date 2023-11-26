@@ -83,3 +83,12 @@ body, html {
     text-align: center;
     line-height: 40px;
 }
+
+.close .line {
+    stroke: blue;
+}
+
+.predictedClose .line {
+    stroke: red;
+    stroke-dasharray: 5,5; /* Dashed line for prediction */
+}

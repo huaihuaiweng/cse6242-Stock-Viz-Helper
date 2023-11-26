@@ -72,6 +72,9 @@
         .xScale(x)
         .yScale(y);
 
+    var predictedClose = techan.plot.close()
+        .xScale(x)
+        .yScale(y);
 
     var yPercent = y.copy();   // Same as y at this stage, will get a different domain later
 
@@ -218,8 +221,7 @@
      *
      *
      * */
-        
-    d3.csv("../stock_data/combined_stocks.csv", function (data) {
+    d3.csv("../stock_data/combined_stocks_with_predictions.csv", function (data) {
 
         // get company list
         var companyList = Array.from(new Set(data.map(d => d.Company))).sort();
@@ -256,7 +258,6 @@
 
     function createElement(data) {
         var accessor = close.accessor(),
-        
         // Parse the date and sort the data
         data = data.map(function (d) {
             return {
@@ -265,22 +266,24 @@
                 high: +d.High,
                 low: +d.Low,
                 close: +d.Close,
+                prediction: +d.predictions,
                 volume: +d.Volume
             };
         }).sort(function (a, b) {
             return d3.ascending(accessor.d(a), accessor.d(b));
         });
-
         svg.append("g")
         .attr("class", "close");
+        svg.append("g")
+        .attr("class", "predictedClose"); // Add this line to create a group for the predicted close 
 
         // Filter the data to the most recent 7 days
+        console.log("data", data);
         var endDate = data[data.length - 1].date; // Assuming the data is sorted by date
         var startDate = d3.timeDay.offset(endDate, -7);
         var recentData = data.filter(function(d) {
             return d.date >= startDate;
         });
-    
         // Set the domains for the scales based on the filtered data
         x.domain(recentData.map(accessor.d));
         y.domain(techan.scale.plot.ohlc(recentData, accessor).domain());
@@ -311,16 +314,42 @@
     }
 
     function draw(data) {
+        var combinedData = data.concat(data.map(function(d) {
+            return {
+                date: d.date,
+                close: d.prediction
+            };
+        }));
+    
+        console.log("recent data", data);
         x.domain(data.map(close.accessor().d));
-        y.domain(techan.scale.plot.ohlc(data, close.accessor()).domain());
-
+        //y.domain(techan.scale.plot.ohlc(data, close.accessor()).domain());
+        // Determine the new domain
+        var yDomain = d3.extent(combinedData, function(d) { return d.close; });
+        y.domain(yDomain).nice();
+        // Update the y-axis with the new domain
+        svg.select("g.y.axis").call(d3.axisRight(y));
+        // Update the y-axis with the new domain for ohlcAnnotation
+        svg.select("g.ohlcAnnotation").call(d3.axisRight(y))
         svg.select("g.x.axis").call(xAxis).attr("transform", `translate( ${0}, ${dim.ohlc.height})`);
         svg.select("g.ohlc .axis").call(yAxis).attr("transform", `translate( ${dim.plot.width}, ${0})`);
         svg.select("g.percent.axis").call(percentAxis).attr("transform", `translate(0, ${0})`);
-        svg.select("g.x.axis").call(xAxis);
+        //svg.select("g.x.axis").call(xAxis);
+        // Draw the predicted close line
+        var predictedData = data.map(function(d) {
+            return {
+                date: d.date,
+                close: d.prediction // Use the 'prediction' field for the predicted line
+            };
+        });
 
         // We know the data does not change, a simple refresh that does not perform data joins will suffice.
         //svg.select("g.candlestick").call(candlestick.refresh);
+        svg.selectAll("g.predictedClose")
+        .datum(predictedData) // Use the prediction data
+        .call(predictedClose)
+        .attr("class", "predictedClose"); // Apply a class for styling if needed
+        
         svg.selectAll("g.close").datum(data).call(close);
         //svg.select("g.close.annotation").call(closeAnnotation.refresh);
         //svg.select("g.volume").call(volume.refresh);
