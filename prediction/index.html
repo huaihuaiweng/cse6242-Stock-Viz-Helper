@@ -210,7 +210,13 @@
         "NVDA": "NVIDIA Corporation",
         "PYPL": "PayPal Holdings, Inc.",
         "SHOP": "Shopify Inc.",
-        "MQ": "Marqeta, Inc."
+        "MQ": "Marqeta, Inc.",
+        "SQ": "Block Inc.",
+        "TEAM": "Atlassian Corp",
+        "TSLA": "Tesla Inc.",
+        "TWLO": "Twilio Inc.",
+        "ZI": "Zoominfo Technologies Inc.",
+        "ZM": "Zoom Video Communications Inc."
     };
 
 
@@ -250,7 +256,7 @@
         d3.select(".dropdown").on("change", function () {
             var filteredData = data.filter(d => d.Company == this.value);
             d3.select(".symbol").remove();
-
+            console.log("company", this.value)
             svg.append('text')
                 .attr("class", "symbol")
                 .attr("x", 20)
