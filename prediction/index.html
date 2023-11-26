@@ -10,9 +10,9 @@
 
         </select>
     </div>
-    <div id="predictionButtonContainer" style="position: absolute; top: 0px; right: 200px;">
+    <div id="predictionButtonContainer" style="position: absolute; top: 0px; right: 160px;">
         <a href="../plot/index.html" target="_blank">
-            <button id="predictionButton" style="white-space: nowrap;">Technical Analysis Visualization</button>
+            <button id="predictionButton" style="white-space: nowrap;">Go to Technical Analysis Visualization</button>
         </a>
     </div>
     <div id="Chart">
@@ -330,7 +330,32 @@
                 close: d.prediction
             };
         }));
-    
+
+        // Add legend after processing the data but before calling the svg.selectAll methods
+        var legend = svg.selectAll(".legend")
+        .data([
+            {color: "blue", text: "Actual Close Price"},
+            {color: "red", text: "Predicted Close Price"}
+        ])
+        .enter()
+        .append("g")
+        .attr("class", "legend")
+        .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+        legend.append("rect")
+            .attr("x", dim.width - dim.margin.right - 18)
+            .attr("y", 344)
+            .attr("width", 18)
+            .attr("height", 18)
+            .style("fill", function(d) { return d.color; });
+
+        legend.append("text")
+            .attr("x", dim.width - dim.margin.right - 24)
+            .attr("y", 350)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(d) { return d.text; });
+        
         console.log("recent data", data);
         x.domain(data.map(close.accessor().d));
         //y.domain(techan.scale.plot.ohlc(data, close.accessor()).domain());
@@ -364,6 +389,7 @@
         //svg.select("g.close.annotation").call(closeAnnotation.refresh);
         //svg.select("g.volume").call(volume.refresh);
         svg.select("g.crosshair.ohlc").call(ohlcCrosshair.refresh);
+
     }    
 
 </script>
