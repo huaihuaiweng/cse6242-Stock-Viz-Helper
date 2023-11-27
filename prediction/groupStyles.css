@@ -10,7 +10,7 @@ body {
     position: absolute;
     top: 10px;
     left: 10px;
-    width: calc(100% - 20px);
+    width: calc(100% - 250px);
     height: 40px;
     text-align: center;
     line-height: 40px;
