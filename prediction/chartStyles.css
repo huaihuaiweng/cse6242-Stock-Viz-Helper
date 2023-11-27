@@ -1,0 +1,94 @@
+body, html {
+    height: 100%;
+    margin: 0 50px;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+#title {
+    font-family: 'Arial', sans-serif; /* 字体类型 */
+    font-size: 24px; /* 字体大小 */
+    color: #333; /* 字体颜色 */
+    text-align: center; /* 文本居中对齐 */
+    margin-top: 0px; /* 顶部边距 */
+    margin-bottom: 10px; /* 底部边距 */
+    padding: 5px; /* 内部填充 */
+    background-color: #f8f8f8; /* 背景颜色 */
+    border-bottom: 2px solid #eaeaea; /* 底部边框 */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 轻微的阴影效果 */
+}
+
+.dropdown{
+    margin-top: 5px;
+}
+
+
+#Chart {
+    position: absolute;
+    top: 65px;
+    left: 15px;
+    right: 220px;
+    bottom: 115px;
+    /* border */
+    border: 3px solid #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    line-height: 40px
+}
+
+
+#technicalIndicators {
+    position: absolute;
+    top: 65px;
+    right: 10px;
+    width: 200px;
+    bottom: 330px;
+    /* border */
+    border: 3px solid #f8f8f8;
+    border-radius: 8px;
+    line-height: 40px;
+}
+
+#toolbox {
+    position: absolute;
+    top: 380px;
+    right: 10px;
+    width: 200px;
+    bottom: 115px;
+    /* border */
+    border: 3px solid #f8f8f8;
+    border-radius: 8px;
+    line-height: 40px;
+}
+
+#explanationBox {
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+    right: 220px;
+    height: 100px;
+    line-height: 100px;
+    border: 3px solid #f8f8f8;
+    border-radius: 8px;
+}
+
+.dropdown {
+    position: absolute;
+    top: 5px;
+    left: 15px;
+    width: 250px;
+    height: 30px;
+
+    text-align: center;
+    line-height: 40px;
+}
+
+.close .line {
+    stroke: blue;
+}
+
+.predictedClose .line {
+    stroke: red;
+    stroke-dasharray: 5,5; /* Dashed line for prediction */
+}

@@ -1,274 +1,216 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style>
-
-    body {
-        font: 10px sans-serif;
-    }
-
-    text {
-        fill: #000;
-    }
-
-    text.symbol {
-        fill: #BBBBBB;
-    }
-
-    path {
-        fill: none;
-        stroke-width: 1;
-    }
-
-    path.candle {
-        stroke: #000000;
-    }
-
-    path.candle.body {
-        stroke-width: 0;
-    }
-
-    path.candle.up {
-        fill: #00AA00;
-        stroke: #00AA00;
-    }
-
-    path.candle.down {
-        fill: #FF0000;
-        stroke: #FF0000;
-    }
-
-    .close.annotation.up path {
-        fill: #00AA00;
-    }
-
-    path.volume {
-        fill: #DDDDDD;
-    }
-
-    .indicator-plot path.line {
-        fill: none;
-        stroke-width: 1;
-    }
-
-    .ma-0 path.line {
-        stroke: #1f77b4;
-    }
-
-    .ma-1 path.line {
-        stroke: #aec7e8;
-    }
-
-    .ma-2 path.line {
-        stroke: #ff7f0e;
-    }
-
-    button {
-        position: absolute;
-        right: 110px;
-        top: 25px;
-    }
-
-    path.macd {
-        stroke: #0000AA;
-    }
-
-    path.signal {
-        stroke: #FF9999;
-    }
-
-    path.zero {
-        stroke: #BBBBBB;
-        stroke-dasharray: 0;
-        stroke-opacity: 0.5;
-    }
-
-    path.difference {
-        fill: #BBBBBB;
-        opacity: 0.5;
-    }
-
-    path.rsi {
-        stroke: #000000;
-    }
-
-    path.overbought, path.oversold {
-        stroke: #FF9999;
-        stroke-dasharray: 5, 5;
-    }
-
-    path.middle, path.zero {
-        stroke: #BBBBBB;
-        stroke-dasharray: 5, 5;
-    }
-
-    .analysis path, .analysis circle {
-        stroke: blue;
-        stroke-width: 0.8;
-    }
-
-    .trendline circle {
-        stroke-width: 0;
-        display: none;
-    }
-
-    .mouseover .trendline path {
-        stroke-width: 1.2;
-    }
-
-    .mouseover .trendline circle {
-        stroke-width: 1;
-        display: inline;
-    }
-
-    .dragging .trendline path, .dragging .trendline circle {
-        stroke: darkblue;
-    }
-
-    .interaction path, .interaction circle {
-        pointer-events: all;
-    }
-
-    .interaction .body {
-        cursor: move;
-    }
-
-    .trendlines .interaction .start, .trendlines .interaction .end {
-        cursor: nwse-resize;
-    }
-
-    .supstance path {
-        stroke-dasharray: 2, 2;
-    }
-
-    .supstances .interaction path {
-        pointer-events: all;
-        cursor: ns-resize;
-    }
-
-    .mouseover .supstance path {
-        stroke-width: 1.5;
-    }
-
-    .dragging .supstance path {
-        stroke: darkblue;
-    }
-
-    .crosshair {
-        cursor: crosshair;
-    }
-
-    .crosshair path.wire {
-        stroke: #DDDDDD;
-        stroke-dasharray: 1, 1;
-    }
-
-    .crosshair .axisannotation path {
-        fill: #DDDDDD;
-    }
-
-    .tradearrow path.tradearrow {
-        stroke: none;
-    }
-
-    .tradearrow path.buy {
-        fill: #0000FF;
-    }
-
-    .tradearrow path.sell {
-        fill: #9900FF;
-    }
-
-    .tradearrow path.highlight {
-        fill: none;
-        stroke-width: 2;
-    }
-
-    .tradearrow path.highlight.buy {
-        stroke: #0000FF;
-    }
-
-    .tradearrow path.highlight.sell {
-        stroke: #9900FF;
-    }
-    .options-group {
-        position: absolute;
-        right: 10px; /* Adjust this value as needed */
-        padding: 10px;
-        background: #ffffff;
-        border-radius: 5px;
-        border: 1px solid #cccccc;
-        margin-top: 10px; /* Spacing between groups */
-        width: 100px;
-    }
-
-    .group-title {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    #options-group1 {
-        top: 50px; /* Adjust this value as needed */
-    }
-
-    #options-group2 {
-        top: 200px; /* Adjust this value as needed */
-    }
-
-</style>
+<link rel="stylesheet" href="chartStyles.css">
+<link rel="stylesheet" href="groupStyles.css">
 <body>
-    <!-- Group 1 for main options -->
-    <div id="options-group1" class="options-group">
-        <div class="group-title">Technical Indicator</div>
-        <form>
-            <label><input type="checkbox" id="volumeCheckbox"> Volume</label><br>
-            <label><input type="checkbox" id="candlestickCheckbox"> CandleStick</label><br>
-            <label><input type="checkbox" id="movingAverageCheckbox"> Moving Average</label><br>
-            <label><input type="checkbox" id="macdCheckbox"> MACD</label><br>
-            <label><input type="checkbox" id="rsiCheckbox"> RSI</label><br>
-        </form>
+<div id="container">
+    <div id="title">
+        <div id="head">Stock Viz Helper</div>
+        <select class="dropdown">
+
+        </select>
     </div>
 
-    <!-- Group 2 for additional options -->
-    <div id="options-group2" class="options-group">
-        <div class="group-title">Toolbox</div>
-        <form>
-            <label><input type="checkbox" id="trendlineCheckbox"> Trendlines</label><br>
-            <label><input type="checkbox" id="supstanceCheckbox"> Supstances</label><br>
-            <label><input type="checkbox" id="tradearrowCheckbox"> Trade Arrows</label><br>
-        </form>
+    <div id="predictionButtonContainer" style="position: absolute; top: 0px; right: 200px;">
+        <a href="../prediction/index.html" target="_blank">
+            <button id="predictionButton" style="white-space: nowrap;">Go to 7 Days Prediction</button>
+        </a>
     </div>
     
-<button>Reset</button>
+
+    <div id="Chart">
+
+    </div>
+
+    <div id="technicalIndicators">
+        <!-- Group 1 for main options -->
+        <div id="options-group1" class="options-group">
+            <div class="group-title">Technical Indicator</div>
+            <form>
+                <label><input type="checkbox" id="volumeCheckbox"> Volume</label><br>
+                <label><input type="checkbox" id="candlestickCheckbox"> CandleStick</label><br>
+                <label><input type="checkbox" id="movingAverageCheckbox"> Moving Average</label><br>
+                <label><input type="checkbox" id="macdCheckbox"> MACD</label><br>
+                <label><input type="checkbox" id="rsiCheckbox"> RSI</label><br>
+            </form>
+
+        </div>
+    </div>
+    <!-- Group 2 for additional options -->
+    <div id="toolbox">
+        <div id="options-group2" class="options-group">
+            <div class="group-title">Toolbox</div>
+            <form>
+                <label><input type="checkbox" id="trendlineCheckbox"> Trendlines</label><br>
+                <label><input type="checkbox" id="supstanceCheckbox"> Supstances</label><br>
+                <label><input type="checkbox" id="tradearrowCheckbox"> Trade Arrows</label><br>
+            </form>
+        </div>
+    </div>
+
+    <div id="explanationBox">
+        <div id="volumebox">
+            <h1>Volume</h1>
+            Volume measures the number of shares traded in a stock or contracts traded in futures or options.<br>
+            Volume can indicate market strength, as rising markets on increasing volume are typically viewed as strong and healthy.<br>
+            When prices fall on increasing volume, the trend is gathering strength to the downside.<br>
+            When prices reach new highs (or no lows) on decreasing volume, watch out—a reversal might be taking shape.<br>
+            <img id = "volumeimg" src = "/Images/volumehigh.png">
+            <p id = "bold-text">
+                This image indictes that the number/volume of purchases is increasing over time.
+            </p>
+            <br><img id = "volumeimg" src = "/Images/volumelow.png">
+            <p id = "bold-text">
+                This image indictes that the number/volume of purchases is decreasing over time.
+            </p>
+        </div>
+        <div id="candlebox">
+            <h1>CandleStick</h1>
+            A candlestick is a type of price chart used in technical analysis that displays the high, low, open, and <br>
+            closing prices of a security for a specific period. Candlesticks originated from Japanese rice merchants <br>
+            and traders to track market prices and daily momentum hundreds of years before becoming popularized in the <br>
+            United States. Candlesticks can be used by traders looking for chart patterns. <br>
+            <img id = "candleimg" src = "/Images/candlestickbasic.png">
+            <p id = "bold-text">
+                Here’s an example of what candlesticks look like:
+            </p>
+            <h2>a) Bullish Patterns</h2>
+            <figure>
+                <img id = "candleimg" src = "/Images/Hammer Pattern.png">
+                <img id = "candleimg" src = "/Images/Inverse Hammer Pattern.png">
+                <img id = "candleimg" src = "/Images/Bullish Engulfing Pattern.png">
+                <img id = "candleimg" src = "/Images/Piercing Line Pattern.png">
+                <img id = "candleimg" src = "/Images/Morning Star Pattern.png">
+                <img id = "candleimg" src = "/Images/Three White Soldiers Pattern.png">
+                <figcaption>
+                    Hammer Pattern, Inverse Hammer Pattern, Bullish Engulfing Pattern, Piercing Line Pattern, Morning Star Pattern and Three White Soldiers Pattern. (Images taken from <a href="https://groww.in/blog/how-to-read-candlestick-charts" target="_blank">groww.in</a>)
+                </figcaption>
+            </figure>
+            <h2>b) Bearish Patterns</h2>
+            <figure>
+                <img id = "candleimg" src = "/Images/Hanging Man Pattern.png">
+                <img id = "candleimg" src = "/Images/Shooting Star Pattern.png">
+                <img id = "candleimg" src = "/Images/Bearish Engulfing Pattern.png">
+                <img id = "candleimg" src = "/Images/Evening Star Pattern.png">
+                <img id = "candleimg" src = "/Images/Three Black Crows Pattern.png">
+                <figcaption>
+                    Hanging Man Pattern, Shooting Star Pattern, Bearish Engulfing Pattern, Evening Star Pattern and Three Black Crows Pattern. (Images taken from <a href="https://groww.in/blog/how-to-read-candlestick-charts" target="_blank">groww.in</a>)
+                </figcaption>
+            </figure>
+        </div>
+        <div id="movingaveragebox">
+            <h1>MovingAverage</h1>
+            A simple moving average is a technical indicator, or tool, that tracks a security's price over a time <br>
+            period and plots it on a line. This essentially “smooths out” price fluctuations to give an investor a <br>
+            general idea where the trend is heading. <br>
+            <figure>
+                <img id = "movingimg" src = "/Images/Moving average.png">
+                <figcaption>
+                    Moving average (Image taken from <a href="https://www.investopedia.com/terms/m/movingaverage.asp" target="_blank">investopedia.com</a>)
+                </figcaption>
+            </figure>
+            <h2>Exponential Moving Average (EMA) and Simple Moving Average (SMA)</h2>
+            Exponential Moving Average (EMA) is similar to Simple Moving Average (SMA), measuring trend direction over a period of time. <br>
+            However, whereas SMA simply calculates an average of price data, EMA applies more weight to data that is more current. <br>
+            Because of its unique calculation, EMA will follow prices more closely than a corresponding SMA. <br>
+            <figure>
+                <img id = "movingimg" src = "/Images/movingaverage.png">
+                <figcaption>
+                    EMA and SMA in our graphs.
+                </figcaption>
+            </figure>
+        </div>
+        <div id="trendlinebox">
+            <h1>Trendlines</h1>
+            Trendlines visualize upward and downward trends in the price of a stock over time. <br>
+            They are fundamental tools in technical analysis, used to predict future market <br>
+            behavior based on past price actions. <br>
+            <figure>
+                <img id = "trendlinesimg" src = "/Images/Trendlines.png">
+                <figcaption>
+                    The blue lines are the trendlines.
+                </figcaption>
+            </figure>
+        </div>
+        <div id="supstancebox">
+            <h1>Supstance</h1>
+            Supstance lines refers to support and resistance. Support: It’s like a floor where the price seems to bounce upwards after hitting it. <br>
+            When the price drops to a certain level, buyers find the price attractive and start buying, thereby increasing the demand and preventing <br>
+            the price from falling below this level. Resistance: It’s like a ceiling where the price can’t seem to break through. <br>
+            When the price rises to a certain level, sellers find the price appealing and start selling, which increases supply and prevents the <br>
+            price from rising above this level. <br>
+            <figure>
+                <img id = "supstanceimg" src = "/Images/Supstance.png">
+                <figcaption>
+                    The dotted lines indicated the levels in supstance.
+                </figcaption>
+            </figure>
+        </div>
+        <div id="arrowbox">
+            <h1>Trade arrows</h1>
+            The trade arrows are created by a simple moving average (SMA) crossover strategy to generate trading signals. This strategy is used <br>
+            to determine optimal points for entering or exiting trades based on the crossover points of moving averages. When the shorter-term <br>
+            SMA crosses above the longer-term SMA, it indicates a potential upward price momentum and hence a buy signal. Conversely, when <br>
+            the shorter-term SMA crosses below the longer-term SMA, it indicates potential downward price momentum, hence a sell signal. <br>
+            The upper arrow indicates the upward movement/buy and the downward arrow indicates that prices will drop/sell <br>
+            <figure>
+                <img id = "tradearrowimg" src = "/Images/Tradearrows.png">
+                <figcaption>
+                    The arrows indicate the buy/sell.
+                </figcaption>
+            </figure>
+        </div>
+    </div>
+</div>
+
+
 <script src="http://d3js.org/d3.v4.min.js"></script>
 <script src="http://techanjs.org/techan.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js"></script>
 <script>
 
+    /*
+    *
+    * Company Dropdown
+    *
+    * */
+
+
+
+    /*
+    *
+    *  Indicators & Toolbox
+    *
+    * */
     var dim = {
         width: 960, height: 500,
-        margin: { top: 20, right: 50, bottom: 30, left: 50 },
-        ohlc: { height: 305 },
-        indicator: { height: 65, padding: 5 }
+        margin: {top: 20, right: 50, bottom: 30, left: 50},
+        ohlc: {height: 305},
+        indicator: {height: 65, padding: 5}
     };
     dim.plot = {
         width: dim.width - dim.margin.left - dim.margin.right,
         height: dim.height - dim.margin.top - dim.margin.bottom
     };
-    dim.indicator.top = dim.ohlc.height+dim.indicator.padding;
-    dim.indicator.bottom = dim.indicator.top+dim.indicator.height+dim.indicator.padding;
+    dim.indicator.top = dim.ohlc.height + dim.indicator.padding;
+    dim.indicator.bottom = dim.indicator.top + dim.indicator.height + dim.indicator.padding;
 
     var indicatorTop = d3.scaleLinear()
-            .range([dim.indicator.top, dim.indicator.bottom]);
+        .range([dim.indicator.top, dim.indicator.bottom]);
 
-    var parseDate = d3.timeParse("%d-%b-%y");
+    // var parseDate = d3.timeParse("%d-%b-%y");
+    // var parseDate = d3.timeParse("%Y/%m/%d");
+    var parseDate = d3.timeParse("%Y-%m-%d");
+
 
     var zoom = d3.zoom()
-            .on("zoom", zoomed);
+        .on("zoom", zoomed);
 
     var x = techan.scale.financetime()
-            .range([0, dim.plot.width]);
+        .range([0, dim.plot.width]);
 
     var y = d3.scaleLinear()
-            .range([dim.ohlc.height, 0]);
+        .range([dim.ohlc.height, 0]);
 
 
     var yPercent = y.copy();   // Same as y at this stage, will get a different domain later
@@ -276,286 +218,385 @@
     var yInit, yPercentInit, zoomableInit;
 
     var yVolume = d3.scaleLinear()
-            .range([y(0), y(0.2)]);
+        .range([y(0), y(0.2)]);
 
     var candlestick = techan.plot.candlestick()
-            .xScale(x)
-            .yScale(y);
+        .xScale(x)
+        .yScale(y);
 
     var tradearrow = techan.plot.tradearrow()
-            .xScale(x)
-            .yScale(y)
-            .y(function(d) {
-                // Display the buy and sell arrows a bit above and below the price, so the price is still visible
-                if(d.type === 'buy') return y(d.low)+5;
-                if(d.type === 'sell') return y(d.high)-5;
-                else return y(d.price);
-            });
+        .xScale(x)
+        .yScale(y)
+        .y(function (d) {
+            // Display the buy and sell arrows a bit above and below the price, so the price is still visible
+            if (d.type === 'buy') return y(d.low);
+            if (d.type === 'sell') return y(d.high);
+            else return y(d.price);
+        });
 
     var sma0 = techan.plot.sma()
-            .xScale(x)
-            .yScale(y);
+        .xScale(x)
+        .yScale(y);
 
     var sma1 = techan.plot.sma()
-            .xScale(x)
-            .yScale(y);
+        .xScale(x)
+        .yScale(y);
 
     var ema2 = techan.plot.ema()
-            .xScale(x)
-            .yScale(y);
+        .xScale(x)
+        .yScale(y);
 
     var volume = techan.plot.volume()
-            .accessor(candlestick.accessor())   // Set the accessor to a ohlc accessor so we get highlighted bars
-            .xScale(x)
-            .yScale(yVolume);
+        .accessor(candlestick.accessor())   // Set the accessor to a ohlc accessor so we get highlighted bars
+        .xScale(x)
+        .yScale(yVolume);
 
     var trendline = techan.plot.trendline()
-            .xScale(x)
-            .yScale(y);
+        .xScale(x)
+        .yScale(y);
 
     var supstance = techan.plot.supstance()
-            .xScale(x)
-            .yScale(y);
+        .xScale(x)
+        .yScale(y);
 
     var xAxis = d3.axisBottom(x);
 
     var timeAnnotation = techan.plot.axisannotation()
-            .axis(xAxis)
-            .orient('bottom')
-            .format(d3.timeFormat('%Y-%m-%d'))
-            .width(65)
-            .translate([0, dim.plot.height]);
+        .axis(xAxis)
+        .orient('bottom')
+        .format(d3.timeFormat('%Y/%m/%d'))
+        .width(65)
+        .translate([0, dim.plot.height]);
 
     var yAxis = d3.axisRight(y);
 
     var ohlcAnnotation = techan.plot.axisannotation()
-            .axis(yAxis)
-            .orient('right')
-            .format(d3.format(',.2f'))
-            .translate([x(1), 0]);
+        .axis(yAxis)
+        .orient('right')
+        .format(d3.format(',.2f'))
+        .translate([x(1), 0]);
 
     var closeAnnotation = techan.plot.axisannotation()
-            .axis(yAxis)
-            .orient('right')
-            .accessor(candlestick.accessor())
-            .format(d3.format(',.2f'))
-            .translate([x(1), 0]);
+        .axis(yAxis)
+        .orient('right')
+        .accessor(candlestick.accessor())
+        .format(d3.format(',.2f'))
+        .translate([x(1), 0]);
 
     var percentAxis = d3.axisLeft(yPercent)
-            .tickFormat(d3.format('+.1%'));
+        .tickFormat(d3.format('+.1%'));
 
     var percentAnnotation = techan.plot.axisannotation()
-            .axis(percentAxis)
-            .orient('left');
+        .axis(percentAxis)
+        .orient('left');
 
     var volumeAxis = d3.axisRight(yVolume)
-            .ticks(3)
-            .tickFormat(d3.format(",.3s"));
+        .ticks(3)
+        .tickFormat(d3.format(",.3s"));
 
     var volumeAnnotation = techan.plot.axisannotation()
-            .axis(volumeAxis)
-            .orient("right")
-            .width(35);
+        .axis(volumeAxis)
+        .orient("right")
+        .width(35);
 
     var macdScale = d3.scaleLinear()
-            .range([indicatorTop(0)+dim.indicator.height, indicatorTop(0)]);
+        .range([indicatorTop(0) + dim.indicator.height, indicatorTop(0)]);
 
     var rsiScale = macdScale.copy()
-            .range([indicatorTop(1)+dim.indicator.height, indicatorTop(1)]);
+        .range([indicatorTop(1) + dim.indicator.height, indicatorTop(1)]);
 
     var macd = techan.plot.macd()
-            .xScale(x)
-            .yScale(macdScale);
+        .xScale(x)
+        .yScale(macdScale);
 
     var macdAxis = d3.axisRight(macdScale)
-            .ticks(3);
+        .ticks(3);
 
     var macdAnnotation = techan.plot.axisannotation()
-            .axis(macdAxis)
-            .orient("right")
-            .format(d3.format(',.2f'))
-            .translate([x(1), 0]);
+        .axis(macdAxis)
+        .orient("right")
+        .format(d3.format(',.2f'))
+        .translate([x(1), 0]);
 
     var macdAxisLeft = d3.axisLeft(macdScale)
-            .ticks(3);
+        .ticks(3);
 
     var macdAnnotationLeft = techan.plot.axisannotation()
-            .axis(macdAxisLeft)
-            .orient("left")
-            .format(d3.format(',.2f'));
+        .axis(macdAxisLeft)
+        .orient("left")
+        .format(d3.format(',.2f'));
 
     var rsi = techan.plot.rsi()
-            .xScale(x)
-            .yScale(rsiScale);
+        .xScale(x)
+        .yScale(rsiScale);
 
     var rsiAxis = d3.axisRight(rsiScale)
-            .ticks(3);
+        .ticks(3);
 
     var rsiAnnotation = techan.plot.axisannotation()
-            .axis(rsiAxis)
-            .orient("right")
-            .format(d3.format(',.2f'))
-            .translate([x(1), 0]);
+        .axis(rsiAxis)
+        .orient("right")
+        .format(d3.format(',.2f'))
+        .translate([x(1), 0]);
 
     var rsiAxisLeft = d3.axisLeft(rsiScale)
-            .ticks(3);
+        .ticks(3);
 
     var rsiAnnotationLeft = techan.plot.axisannotation()
-            .axis(rsiAxisLeft)
-            .orient("left")
-            .format(d3.format(',.2f'));
+        .axis(rsiAxisLeft)
+        .orient("left")
+        .format(d3.format(',.2f'));
 
     var ohlcCrosshair = techan.plot.crosshair()
-            .xScale(timeAnnotation.axis().scale())
-            .yScale(ohlcAnnotation.axis().scale())
-            .xAnnotation(timeAnnotation)
-            .yAnnotation([ohlcAnnotation, percentAnnotation, volumeAnnotation])
-            .verticalWireRange([0, dim.plot.height]);
+        .xScale(timeAnnotation.axis().scale())
+        .yScale(ohlcAnnotation.axis().scale())
+        .xAnnotation(timeAnnotation)
+        .yAnnotation([ohlcAnnotation, percentAnnotation, volumeAnnotation])
+        .verticalWireRange([0, dim.plot.height]);
 
     var macdCrosshair = techan.plot.crosshair()
-            .xScale(timeAnnotation.axis().scale())
-            .yScale(macdAnnotation.axis().scale())
-            .xAnnotation(timeAnnotation)
-            .yAnnotation([macdAnnotation, macdAnnotationLeft])
-            .verticalWireRange([0, dim.plot.height]);
+        .xScale(timeAnnotation.axis().scale())
+        .yScale(macdAnnotation.axis().scale())
+        .xAnnotation(timeAnnotation)
+        .yAnnotation([macdAnnotation, macdAnnotationLeft])
+        .verticalWireRange([0, dim.plot.height]);
 
     var rsiCrosshair = techan.plot.crosshair()
-            .xScale(timeAnnotation.axis().scale())
-            .yScale(rsiAnnotation.axis().scale())
-            .xAnnotation(timeAnnotation)
-            .yAnnotation([rsiAnnotation, rsiAnnotationLeft])
-            .verticalWireRange([0, dim.plot.height]);
-    
+        .xScale(timeAnnotation.axis().scale())
+        .yScale(rsiAnnotation.axis().scale())
+        .xAnnotation(timeAnnotation)
+        .yAnnotation([rsiAnnotation, rsiAnnotationLeft])
+        .verticalWireRange([0, dim.plot.height]);
+
     // var ichimoku = techan.plot.ichimoku()
     //         .xScale(x)
     //         .yScale(y);
 
-    var svg = d3.select("body").append("svg")
-            .attr("width", dim.width)
-            .attr("height", dim.height);
+    var svg = d3.select("#Chart").append("svg")
+        .attr("width", dim.width)
+        .attr("height", dim.height);
+
 
     var defs = svg.append("defs");
 
     defs.append("clipPath")
-            .attr("id", "ohlcClip")
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", 0)
-            .attr("width", dim.plot.width)
-            .attr("height", dim.ohlc.height);
+        .attr("id", "ohlcClip")
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", dim.plot.width)
+        .attr("height", dim.ohlc.height);
 
     defs.selectAll("indicatorClip").data([0, 1])
         .enter()
-            .append("clipPath")
-            .attr("id", function(d, i) { return "indicatorClip-" + i; })
-            .append("rect")
-            .attr("x", 0)
-            .attr("y", function(d, i) { return indicatorTop(i); })
-            .attr("width", dim.plot.width)
-            .attr("height", dim.indicator.height);
+        .append("clipPath")
+        .attr("id", function (d, i) {
+            return "indicatorClip-" + i;
+        })
+        .append("rect")
+        .attr("x", 0)
+        .attr("y", function (d, i) {
+            return indicatorTop(i);
+        })
+        .attr("width", dim.plot.width)
+        .attr("height", dim.indicator.height);
 
     svg = svg.append("g")
-            .attr("transform", "translate(" + dim.margin.left + "," + dim.margin.top + ")");
+        .attr("transform", "translate(" + dim.margin.left + "," + dim.margin.top + ")");
 
-    svg.append('text')
-            .attr("class", "symbol")
-            .attr("x", 20)
-            .text("Facebook, Inc. (FB)");
+    // svg.append('text')
+    //     .attr("class", "symbol")
+    //     .attr("x", 20)
+    //     .text("Facebook, Inc. (FB)");
 
     svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + dim.plot.height + ")");
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + dim.plot.height + ")");
 
     var ohlcSelection = svg.append("g")
-            .attr("class", "ohlc")
-            .attr("transform", "translate(0,0)");
+        .attr("class", "ohlc")
+        .attr("transform", "translate(0,0)");
 
     ohlcSelection.append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(" + x(1) + ",0)")
-            .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", -12)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text("Price ($)");
+        .attr("class", "axis")
+        .attr("transform", "translate(" + x(1) + ",0)")
+        .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -12)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Price ($)");
 
     ohlcSelection.append("g")
-            .attr("class", "close annotation up");
+        .attr("class", "close annotation up");
 
     ohlcSelection.append("g")
-            .attr("class", "volume")
-            .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "volume")
+        .attr("clip-path", "url(#ohlcClip)");
 
     ohlcSelection.append("g")
-            .attr("class", "candlestick")
-            .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "candlestick")
+        .attr("clip-path", "url(#ohlcClip)");
 
     ohlcSelection.append("g")
-            .attr("class", "indicator sma ma-0")
-            .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "indicator sma ma-0")
+        .attr("clip-path", "url(#ohlcClip)");
 
     ohlcSelection.append("g")
-            .attr("class", "indicator sma ma-1")
-            .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "indicator sma ma-1")
+        .attr("clip-path", "url(#ohlcClip)");
 
     ohlcSelection.append("g")
-            .attr("class", "indicator ema ma-2")
-            .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "indicator ema ma-2")
+        .attr("clip-path", "url(#ohlcClip)");
 
     ohlcSelection.append("g")
-            .attr("class", "percent axis");
+        .attr("class", "percent axis");
 
     ohlcSelection.append("g")
-            .attr("class", "volume axis");
+        .attr("class", "volume axis");
 
     var indicatorSelection = svg.selectAll("svg > g.indicator").data(["macd", "rsi"]).enter()
-             .append("g")
-                .attr("class", function(d) { return d + " indicator"; });
+        .append("g")
+        .attr("class", function (d) {
+            return d + " indicator";
+        });
 
     indicatorSelection.append("g")
-            .attr("class", "axis right")
-            .attr("transform", "translate(" + x(1) + ",0)");
+        .attr("class", "axis right")
+        .attr("transform", "translate(" + x(1) + ",0)");
 
     indicatorSelection.append("g")
-            .attr("class", "axis left")
-            .attr("transform", "translate(" + x(0) + ",0)");
+        .attr("class", "axis left")
+        .attr("transform", "translate(" + x(0) + ",0)");
 
     indicatorSelection.append("g")
-            .attr("class", "indicator-plot")
-            .attr("clip-path", function(d, i) { return "url(#indicatorClip-" + i + ")"; });
+        .attr("class", "indicator-plot")
+        .attr("clip-path", function (d, i) {
+            return "url(#indicatorClip-" + i + ")";
+        });
 
     // Add trendlines and other interactions last to be above zoom pane
     svg.append('g')
-            .attr("class", "crosshair ohlc");
+        .attr("class", "crosshair ohlc");
 
     svg.append("g")
-            .attr("class", "tradearrow")
-            .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "tradearrow")
+        .attr("clip-path", "url(#ohlcClip)");
 
     svg.append('g')
-            .attr("class", "crosshair macd");
+        .attr("class", "crosshair macd");
 
     svg.append('g')
-            .attr("class", "crosshair rsi");
+        .attr("class", "crosshair rsi");
 
     svg.append("g")
-            .attr("class", "trendlines analysis")
-            .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "trendlines analysis")
+        .attr("clip-path", "url(#ohlcClip)");
     svg.append("g")
-            .attr("class", "supstances analysis")
-            .attr("clip-path", "url(#ohlcClip)");
-    // svg.append("g")
-    //         .attr("class", "ichimoku")
-    //         .attr("clip-path", "url(#ohlcClip)");
+        .attr("class", "supstances analysis")
+        .attr("clip-path", "url(#ohlcClip)");
 
     d3.select("button").on("click", clearAllCheckboxes);
 
-    d3.csv("data.csv", function(error, data) {
-        var accessor = candlestick.accessor(),
-            indicatorPreRoll = 33;  // Don't show where indicators don't have data
+    const companyMap = {
+        "AAPL": "Apple Inc.",
+        "ADBE": "Adobe Inc.",
+        "AMD": "Advanced Micro Devices, Inc.",
+        "AMZN": "Amazon.com, Inc.",
+        "CRM": "Salesforce, Inc.",
+        "CSCO": "Cisco Systems, Inc.",
+        "DDOG": "Datadog, Inc.",
+        "DOCU": "DocuSign, Inc.",
+        "GOOG": "Alphabet Inc. (Class C)",
+        "GOOGL": "Alphabet Inc. (Class A)",
+        "IBM": "International Business Machines Corporation",
+        "INTC": "Intel Corporation",
+        "MDB": "MongoDB, Inc.",
+        "META": "Meta Platforms, Inc. (formerly known as Facebook, Inc.)",
+        "MSFT": "Microsoft Corporation",
+        "NFLX": "Netflix, Inc.",
+        "NVDA": "NVIDIA Corporation",
+        "PYPL": "PayPal Holdings, Inc.",
+        "SHOP": "Shopify Inc.",
+        "MQ": "Marqeta, Inc.",
+        "SQ": "Block Inc.",
+        "TEAM": "Atlassian Corp",
+        "TSLA": "Tesla Inc.",
+        "TWLO": "Twilio Inc.",
+        "ZI": "Zoominfo Technologies Inc.",
+        "ZM": "Zoom Video Communications Inc."
+    };
 
-        data = data.map(function(d) {
+
+
+    /*
+     *
+     * Nov. 11
+     * Author: Lance
+     * Comment: Modified the csv reading function and integrated into createElement().
+     *          The graph displays incorrectly.
+     *          Uncomment the following two functions and comment out the original d3.csv() to test.
+     *
+     *
+     * */
+     function removeTrendlines() {
+        svg.select(".trendlines").selectAll("*").remove();
+    }
+        
+    d3.csv("../stock_data/combined_stocks.csv", function (data) {
+
+        // get company list
+        var companyList = Array.from(new Set(data.map(d => d.Company))).sort();
+        // add options to Button
+
+        var dropdown = d3.select(".dropdown");
+
+        dropdown.append("option")
+                .text("Select a stock")
+                .attr("value", "")
+                .attr("disabled", true)
+                .attr("selected", true)
+
+        dropdown.selectAll('option.company')
+            .data(companyList) // take companyList
+            .enter()
+            .append("option")
+            .classed("company", true)
+            .text(d => d)
+            .attr("value", d => d);
+
+        d3.select(".dropdown").on("change", function () {
+            removeTrendlines(); 
+            var filteredData = data.filter(d => d.Company == this.value);
+            console.log("Comapny", this.value)
+            console.log("filteredData", filteredData);
+            // Assuming the data is already sorted by date, find the last date in your dataset
+            var lastDate = d3.max(filteredData, function(d) { return parseDate(d.Date); });
+            // Calculate the first date of the last year (most recent year)
+            var firstDateOfLastYear = new Date(lastDate.getFullYear() - 1, lastDate.getMonth(), lastDate.getDate());
+            // Filter the data to only include entries from the most recent year
+            var one_year_data = filteredData.filter(function(d) {
+                return parseDate(d.Date) >= firstDateOfLastYear;
+            });
+            d3.select(".symbol").remove();
+
+            svg.append('text')
+                .attr("class", "symbol")
+                .attr("x", 20)
+                .text(companyMap[this.value]);
+            console.log("lastDate", lastDate)
+            console.log("firstDateOfLastYear", firstDateOfLastYear)
+            console.log("one_year_data", one_year_data);
+            createElement(one_year_data);
+        });
+    });
+
+
+    function createElement(data) {
+        var accessor = candlestick.accessor(),
+        indicatorPreRoll = 33;  // Don't show where indicators don't have data
+        data = data.map(function (d) {
             return {
                 date: parseDate(d.Date),
                 open: +d.Open,
@@ -564,37 +605,40 @@
                 close: +d.Close,
                 volume: +d.Volume
             };
-        }).sort(function(a, b) { return d3.ascending(accessor.d(a), accessor.d(b)); });
+        }).sort(function (a, b) {
+            return d3.ascending(accessor.d(a), accessor.d(b));
+        });
 
+        console.log("data", data);
         x.domain(techan.scale.plot.time(data).domain());
         y.domain(techan.scale.plot.ohlc(data.slice(indicatorPreRoll)).domain());
+        console.log("ohlc domain", techan.scale.plot.ohlc(data.slice(indicatorPreRoll)).domain())
         yPercent.domain(techan.scale.plot.percent(y, accessor(data[indicatorPreRoll])).domain());
         yVolume.domain(techan.scale.plot.volume(data).domain());
 
-        var trendlineData = [
-            { start: { date: new Date(2014, 2, 11), value: 72.50 }, end: { date: new Date(2014, 5, 9), value: 63.34 } },
-            { start: { date: new Date(2013, 10, 21), value: 43 }, end: { date: new Date(2014, 2, 17), value: 70.50 } }
-        ];
-
-        var supstanceData = [
-            { start: new Date(2014, 2, 11), end: new Date(2014, 5, 9), value: 63.64 },
-            { start: new Date(2013, 10, 21), end: new Date(2014, 2, 17), value: 55.50 }
-        ];
-
-        var trades = [
-            { date: data[67].date, type: "buy", price: data[67].low, low: data[67].low, high: data[67].high },
-            { date: data[100].date, type: "sell", price: data[100].high, low: data[100].low, high: data[100].high },
-            { date: data[130].date, type: "buy", price: data[130].low, low: data[130].low, high: data[130].high },
-            { date: data[170].date, type: "sell", price: data[170].low, low: data[170].low, high: data[170].high }
-        ];
+        // Dynamically create trendline data
+        console.log("x", x.domain())
+        console.log("x first", x.domain()[0])
+        console.log("x last", x.domain()[x.domain().length - 1])
+        console.log("x length", x.domain().length)
+        console.log("y", y.domain())
+        var trendlineData = createTrendlineData(data, x, y);
+        console.log("trendlineData", trendlineData)
+        // Dynamically create supstance data
+        var supstanceData = createSupstanceData(data);
+        console.log("supstanceData", supstanceData)
+        // Dynamically create trade data
+        var trades = createTrades(data);
+        // console.log("trades", trades)
 
         var macdData = techan.indicator.macd()(data);
         macdScale.domain(techan.scale.plot.macd(macdData).domain());
         var rsiData = techan.indicator.rsi()(data);
         rsiScale.domain(techan.scale.plot.rsi(rsiData).domain());
 
+
         svg.select("g.candlestick").datum(data).call(candlestick);
-        svg.select("g.close.annotation").datum([data[data.length-1]]).call(closeAnnotation);
+        svg.select("g.close.annotation").datum([data[data.length - 1]]).call(closeAnnotation);
         svg.select("g.volume").datum(data).call(volume);
         svg.select("g.sma.ma-0").datum(techan.indicator.sma().period(10)(data)).call(sma0);
         svg.select("g.sma.ma-1").datum(techan.indicator.sma().period(20)(data)).call(sma1);
@@ -609,14 +653,13 @@
         svg.select("g.supstances").datum(supstanceData).call(supstance).call(supstance.drag);
 
         svg.select("g.tradearrow").datum(trades).call(tradearrow);
-
         // Stash for zooming
         zoomableInit = x.zoomable().domain([indicatorPreRoll, data.length]).copy(); // Zoom in a little to hide indicator preroll
         yInit = y.copy();
         yPercentInit = yPercent.copy();
 
         draw();
-    });
+    }
 
     function reset() {
         // zoom.scale(1);
@@ -658,39 +701,102 @@
         svg.select("g.tradearrow").call(tradearrow.refresh);
     }
 
-    document.getElementById('volumeCheckbox').addEventListener('change', function() {
+    var tip = d3.tip()
+        .attr("class", "d3-tip")
+        .offset([-10, -100])
+        .html(function (d) {
+            return d;
+        });
+
+    svg.call(tip);
+
+    document.getElementById('volumeCheckbox').addEventListener('change', function () {
         svg.selectAll(".volume").style("display", this.checked ? null : "none");
+        document.getElementById('volumebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".ohlc").on("mouseover", function(d, i) {
+            tip.show("Volume, Candlestick and Moving average", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
-    document.getElementById('candlestickCheckbox').addEventListener('change', function() {
+    document.getElementById('candlestickCheckbox').addEventListener('change', function () {
         svg.selectAll(".candlestick").style("display", this.checked ? null : "none");
+        document.getElementById('candlebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".ohlc").on("mouseover", function(d, i) {
+            tip.show("Volume, Candlestick and Moving average", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
-    document.getElementById('movingAverageCheckbox').addEventListener('change', function() {
+    document.getElementById('movingAverageCheckbox').addEventListener('change', function () {
         svg.selectAll(".sma").style("display", this.checked ? null : "none");
         svg.selectAll(".ema").style("display", this.checked ? null : "none"); // Assuming EMA is also a moving average
+        document.getElementById('movingaveragebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".ohlc").on("mouseover", function(d, i) {
+            tip.show("Volume, Candlestick and Moving average", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
-    document.getElementById('macdCheckbox').addEventListener('change', function() {
+    document.getElementById('macdCheckbox').addEventListener('change', function () {
         svg.selectAll(".macd").style("display", this.checked ? null : "none");
+        svg.selectAll(".macd").on("mouseover", function(d, i) {
+            tip.show("The Moving Average Convergence/Divergence indicator is a momentum oscillator primarily used to trade trends. Although it is an oscillator, it is not typically used to identify over bought or oversold conditions. It appears on the chart as two lines which oscillate without boundaries.", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
-    document.getElementById('rsiCheckbox').addEventListener('change', function() {
+    document.getElementById('rsiCheckbox').addEventListener('change', function () {
         svg.selectAll(".rsi").style("display", this.checked ? null : "none");
+        svg.selectAll(".rsi").on("mouseover", function(d, i) {
+            tip.show("The Relative Strength Index (RSI), developed by J. Welles Wilder, is a momentum oscillator that measures the speed and change of price movements. The RSI oscillates between zero and 100. Traditionally the RSI is considered overbought when above 70 and oversold when below 30.", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
-    document.getElementById('trendlineCheckbox').addEventListener('change', function() {
+    document.getElementById('trendlineCheckbox').addEventListener('change', function () {
         svg.selectAll(".trendlines").style("display", this.checked ? null : "none");
+        document.getElementById('trendlinebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".trendlines").on("mouseover", function(d, i) {
+            tip.show("Trendlines", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     // Event listener for the supstance checkbox
-    document.getElementById('supstanceCheckbox').addEventListener('change', function() {
+    document.getElementById('supstanceCheckbox').addEventListener('change', function () {
         svg.selectAll(".supstances").style("display", this.checked ? null : "none");
+        document.getElementById('supstancebox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".supstances").on("mouseover", function(d, i) {
+            tip.show("Supstances", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     // Event listener for the tradearrow checkbox
-    document.getElementById('tradearrowCheckbox').addEventListener('change', function() {
+    document.getElementById('tradearrowCheckbox').addEventListener('change', function () {
         svg.selectAll(".tradearrow").style("display", this.checked ? null : "none");
+        document.getElementById('arrowbox').style.display = this.checked ? 'block' : 'none';
+        svg.selectAll(".tradearrow").on("mouseover", function(d, i) {
+            tip.show("Tradearrow", this);
+        })
+        .on("mouseout", function() {
+            tip.hide();
+        });
     });
 
     // Assuming you have an element for Ichimoku Cloud, which might not be the case.
@@ -716,13 +822,124 @@
     applyInitialCheckboxStates();
 
     function clearAllCheckboxes() {
-    var checkboxes = document.querySelectorAll('form input[type="checkbox"]');
-    checkboxes.forEach(function(checkbox) {
-        checkbox.checked = false;
-        checkbox.dispatchEvent(new Event('change'));
-    });
-    // Call any additional functions to update the chart here if necessary
-}
+        var checkboxes = document.querySelectorAll('form input[type="checkbox"]');
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = false;
+            checkbox.dispatchEvent(new Event('change'));
+        });
+        // Call any additional functions to update the chart here if necessary
+    }
 
+    function createTrendlineData(data) {
+        // Assuming data is sorted by date ascending
+        // Find the lowest low and highest high for the positive slope
+        let low = data.reduce((min, p) => p.low < min.low ? p : min, data[0]);
+        let high = data.reduce((max, p) => p.high > max.high ? p : max, data[0]);
+    
+        // For the negative slope, find the high and then the lowest low after that high
+        let highForNegative = high;
+        let lowAfterHighForNegative = data.slice(data.indexOf(highForNegative)).reduce((min, p) => p.low < min.low ? p : min, highForNegative);
+    
+        // Create two trendlines
+        let positiveSlopeTrendline = {
+            start: { date: low.date, value: low.low },
+            end: { date: high.date, value: high.high }
+        };
+    
+        let negativeSlopeTrendline = {
+            start: { date: highForNegative.date, value: highForNegative.high },
+            end: { date: lowAfterHighForNegative.date, value: lowAfterHighForNegative.low }
+        };
+    
+        return [positiveSlopeTrendline, negativeSlopeTrendline];
+    }
+    
+    function createSupstanceData(data, tolerancePercentage = 10) {
+        let groupedLevels = {};
+    
+        // Group price levels that are within a certain percentage of each other
+        data.forEach(d => {
+            let levels = [d.high, d.low];
+    
+            levels.forEach(level => {
+                let foundGroup = false;
+    
+                for (let groupedLevel in groupedLevels) {
+                    let groupedPrice = parseFloat(groupedLevel);
+    
+                    // Define tolerance range for grouping
+                    let tolerance = groupedPrice * tolerancePercentage / 100;
+    
+                    // If the level is within the tolerance range, group it
+                    if (level >= groupedPrice - tolerance && level <= groupedPrice + tolerance) {
+                        groupedLevels[groupedLevel].count++;
+                        groupedLevels[groupedLevel].prices.push(level);
+                        foundGroup = true;
+                        break;
+                    }
+                }
+    
+                // If level didn't fit into any group, create a new group
+                if (!foundGroup) {
+                    groupedLevels[level] = { count: 1, prices: [level] };
+                }
+            });
+        });
+    
+        // Convert grouped levels into an array and sort by count
+        let sortedGroups = Object.keys(groupedLevels)
+            .map(price => ({
+                price: parseFloat(price),
+                count: groupedLevels[price].count,
+                averagePrice: d3.mean(groupedLevels[price].prices)
+            }))
+            .sort((a, b) => b.count - a.count);
+    
+        // Take the start and end dates from the dataset
+        let startDate = data[0].date;
+        let endDate = data[data.length - 1].date;
+    
+        // Map sorted groups to supstance data
+        let supstances = sortedGroups.map(group => ({
+            start: startDate,
+            end: endDate,
+            value: group.averagePrice
+        }));
+    
+        return supstances;
+    }
+                
+    function createTrades(data) {
+        // Simple moving average crossover strategy
+        let smaPeriodShort = 10;
+        let smaPeriodLong = 20;
+    
+        let smaShort = calculateSMA(data, smaPeriodShort);
+        let smaLong = calculateSMA(data, smaPeriodLong);
+    
+        let trades = [];
+    
+        for (let i = 1; i < data.length; i++) {
+            if (smaShort[i] > smaLong[i] && smaShort[i - 1] <= smaLong[i - 1]) {
+                trades.push({ date: data[i].date, type: "buy", price: data[i].close, low: data[i].low, high: data[i].high});
+            } else if (smaShort[i] < smaLong[i] && smaShort[i - 1] >= smaLong[i - 1]) {
+                trades.push({ date: data[i].date, type: "sell", price: data[i].close, low: data[i].low, high: data[i].high});
+            }
+        }
+    
+        return trades;
+    }
+    
+    function calculateSMA(data, period) {
+        let sma = data.map(d => d.close).map((elem, index, arr) => {
+            let start = Math.max(0, index - period + 1);
+            let subset = arr.slice(start, index + 1);
+            let sum = subset.reduce((a, b) => a + b, 0);
+            return sum / subset.length;
+        });
+    
+        return sma;
+    }
+    
 
 </script>
